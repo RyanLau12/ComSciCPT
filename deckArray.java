@@ -111,8 +111,7 @@ public class deckArray{
 				} 
 			}
 		
-		}
-		
+		}	
 	}
 	
 	public static void main(String[] args){
