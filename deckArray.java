@@ -14,15 +14,15 @@ import java.io.*;
 
 public class deckArray{
 	//properties
-	String[][] deck = new String[52][3]; //card name, suit,random number
-	public double dblRand;
-	public int intCount;
+	
 	
 	//methods
-	
-	
-	//constructor
-	public deckArray(){
+	public static String[][] theDeck(){
+		String[][] deck = new String[52][3]; //card name, suit,random number
+		double dblRand;
+		int intCount;
+		int intCount1;
+		int intCount2;
 		deck[0][0] = "A";
 		deck[1][0] = 2 + "";
 		deck[2][0] = 3 + "";
@@ -80,42 +80,50 @@ public class deckArray{
 		deck[51][0] = "K";
 		
 		//loading suits
-		for(intCount = 0; intCount <51; intCount++){
+		for(intCount = 0; intCount <52; intCount++){
 			if(intCount <13){
-				deck[intCount][1] = "S";
+				deck[intCount][1] = "Spades";
 			}else if(intCount >=13 && intCount <26){
-				deck[intCount][1] = "H";
+				deck[intCount][1] = "Hearts";
 			}else if(intCount >=26 && intCount< 39){
-				deck[intCount][1] = "C";
+				deck[intCount][1] = "Clubs";
 			}else if(intCount >= 39){
-				deck[intCount][1] = "D";
+				deck[intCount][1] = "Diamonds";
 			}
-			dblRand = Math.random(); //random number for 3rd coloumn
+			dblRand = Math.random()*2984; //random number for 3rd coloumn
 			deck[intCount][2] = dblRand + "";
 		}
+		
 		//bubble sort by the random number
-		for(intCount = 0; intCount < 51; intCount++){
-			for(intCount = 0; intCount < 51; intCount++){
-				if(Double.parseDouble(deck[intCount+1][2]) < Double.parseDouble(deck[intCount][2])){
-					String strTemp0 = deck[intCount][0];
-					String strTemp1 = deck[intCount][1];
-					String strTemp2 = deck[intCount][2];
+		for(intCount = 0; intCount < 50; intCount++){
+			for(intCount2 = 0; intCount2 < 50; intCount2++){
+				if(Double.parseDouble(deck[intCount2][2]) > Double.parseDouble(deck[intCount2+1][2])){
+					String strTemp0 = deck[intCount2][0];	
+					String strTemp1 = deck[intCount2][1];
+					String strTemp2 = deck[intCount2][2];
 					
-					deck[intCount][0] = deck[intCount+1][0];
-					deck[intCount][1] = deck[intCount+1][1];
-					deck[intCount][2] = deck[intCount+1][2];
+					deck[intCount2][0] = deck[intCount2+1][0];
+					deck[intCount2][1] = deck[intCount2+1][1];
+					deck[intCount2][2] = deck[intCount2+1][2];
 					
-					deck[intCount+1][0] = strTemp0;
-					deck[intCount+1][0] = strTemp1;
-					deck[intCount+1][0] = strTemp2;
+					deck[intCount2+1][0] = strTemp0;
+					deck[intCount2+1][1] = strTemp1;
+					deck[intCount2+1][2] = strTemp2;
 				} 
 			}
 		
-		}	
+		}
+		return deck;
+	}
+	//constructor
+	public deckArray(){
+			
 	}
 	
 	public static void main(String[] args){
-		new deckArray();
+		int intCount;
+		String hihi[][] = deckArray.theDeck();
+		
 	}
 
 }
