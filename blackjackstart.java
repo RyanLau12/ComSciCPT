@@ -6,15 +6,18 @@ import javax.swing.event.*;
 public class blackjackstart implements ActionListener, KeyListener{
 	//Properties
 	JFrame theframe = new JFrame("Blackjack");
-	JPanel thepanel = new JPanel();
-	JLabel theserverlabel = new JLabel("Start as Server");
-	JTextField thename = new JTextField();
-	JLabel theiplabel = new JLabel("Enter IP");
+	JPanel thepanel = new blackjackstartpanel();
+	JButton theserver = new JButton("Start as Server");
+	JTextField thename = new JTextField("Enter Username");
+	JButton theclient = new JButton("Start as Client");
 	JTextField theip = new JTextField("127.0.0.1");
+	JButton thehelp = new JButton("Help/Rules");
+	JButton thestart = new JButton("Start Game");
 	SuperSocketMaster ssm;
 	
 	//Methods
 	public void actionPerformed(ActionEvent evt){
+		
 	}
 	public void keyReleased(KeyEvent evt){
 	}
@@ -25,9 +28,18 @@ public class blackjackstart implements ActionListener, KeyListener{
 	
 	//Constructor
 	public blackjackstart(){
-		thepanel.add(theserverlabel);
+		thepanel.setLayout(null);
+		theserver.setSize(300,50);
+		theserver.setHorizontalAlignment(SwingConstants.CENTER);
+		theserver.setLocation(320,450);
+		thepanel.add(theserver);
 		
-		thepanel.setPreferredSize(new Dimension(300, 300));
+		thename.setSize(300,50);
+		thename.setHorizontalAlignment(SwingConstants.CENTER);
+		thename.setLocation(665,450);
+		thepanel.add(thename);
+		
+		thepanel.setPreferredSize(new Dimension(1280, 720));
 		theframe.setContentPane(thepanel);
 		theframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		theframe.setResizable(false);
@@ -40,5 +52,4 @@ public class blackjackstart implements ActionListener, KeyListener{
 	public static void main(String[] args){
 		new blackjackstart();
 	}
-	
 }
