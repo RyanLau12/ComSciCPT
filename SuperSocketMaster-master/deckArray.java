@@ -18,7 +18,7 @@ public class deckArray{
 	
 	//methods
 	public static String[][] theDeck(){
-		String[][] deck = new String[52][3]; //card name, suit,random number
+		String[][] deck = new String[52][4]; //card name, suit,random number, imagine file name
 		double dblRand;
 		int intCount;
 		int intCount1;
@@ -82,16 +82,20 @@ public class deckArray{
 		//loading suits
 		for(intCount = 0; intCount <52; intCount++){
 			if(intCount <13){
-				deck[intCount][1] = "Spades";
+				deck[intCount][1] = "S";
 			}else if(intCount >=13 && intCount <26){
-				deck[intCount][1] = "Hearts";
+				deck[intCount][1] = "H";
 			}else if(intCount >=26 && intCount< 39){
-				deck[intCount][1] = "Clubs";
+				deck[intCount][1] = "C";
 			}else if(intCount >= 39){
-				deck[intCount][1] = "Diamonds";
+				deck[intCount][1] = "D";
 			}
 			dblRand = Math.random()*2984; //random number for 3rd coloumn
 			deck[intCount][2] = dblRand + "";
+		}
+		//add image file names. NOT ACTUALLY LOADING IMAGES, only file names
+		for(intCount = 0; intCount<51; intCount++){
+			deck[intCount][3] = deck[intCount][0] + deck[intCount][1] + ".png";
 		}
 		
 		//bubble sort by the random number
@@ -101,14 +105,17 @@ public class deckArray{
 					String strTemp0 = deck[intCount2][0];	
 					String strTemp1 = deck[intCount2][1];
 					String strTemp2 = deck[intCount2][2];
+					String strTemp3 = deck[intCount2][3];
 					
 					deck[intCount2][0] = deck[intCount2+1][0];
 					deck[intCount2][1] = deck[intCount2+1][1];
 					deck[intCount2][2] = deck[intCount2+1][2];
+					deck[intCount2][3] = deck[intCount2+1][3];
 					
 					deck[intCount2+1][0] = strTemp0;
 					deck[intCount2+1][1] = strTemp1;
 					deck[intCount2+1][2] = strTemp2;
+					deck[intCount2+1][3] = strTemp3;
 				} 
 			}
 		
@@ -123,6 +130,12 @@ public class deckArray{
 	public static void main(String[] args){
 		int intCount;
 		String hihi[][] = deckArray.theDeck();
+		for(intCount = 3; intCount < 51; intCount++){
+			System.out.println(hihi[intCount][0]);
+			System.out.println(hihi[intCount][1]);
+			System.out.println(hihi[intCount][2]);
+			System.out.println(hihi[intCount][3]);
+		}
 		
 	}
 
