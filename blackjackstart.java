@@ -14,10 +14,42 @@ public class blackjackstart implements ActionListener, KeyListener{
 	JButton thehelp = new JButton("Help/Rules");
 	JButton thestart = new JButton("Start Game");
 	SuperSocketMaster ssm;
+	String strstuff;
+	String strsplit[] = new String[10];
+	
+	//player variables
+	String strname;
+	//game variables
+	int usercount;
+	String thedeck[][];
 	
 	//Methods
 	public void actionPerformed(ActionEvent evt){
-		
+		if(evt.getSource() == theserver){
+			ssm = new SuperSocketMaster(2188, this);	
+			ssm.connect();
+			theserver.setEnabled(false);	
+			theclient.setEnabled(false);
+			thestart.setEnabled(true);
+			System.out.println("hi");
+		}else if(evt.getSource() == theclient){
+			ssm = new SuperSocketMaster(theip.getText(), 2188, this);
+			ssm.connect();
+			theclient.setEnabled(false);
+			theserver.setEnabled(false);
+			ssm.sendText("clientConnected");
+		}else if(evt.getSource() == thename){
+			strname = thename.getText();
+			thename.setEditable(false);
+		}else if(evt.getSource() == thestart){
+			thedeck = deckArray.theDeck();
+		}else if(evt.getSource() == ssm){
+			strstuff = ssm.readText();
+			strsplit = strstuff.split(",");
+			if(strsplit[0].equals("clientConnected")){
+				usercount++;
+			}
+		}
 	}
 	public void keyReleased(KeyEvent evt){
 	}
@@ -32,12 +64,36 @@ public class blackjackstart implements ActionListener, KeyListener{
 		theserver.setSize(300,50);
 		theserver.setHorizontalAlignment(SwingConstants.CENTER);
 		theserver.setLocation(320,450);
+		theserver.addActionListener(this);
 		thepanel.add(theserver);
+		
+		theclient.setSize(300,50);
+		theclient.setHorizontalAlignment(SwingConstants.CENTER);
+		theclient.setLocation(320,525);
+		theclient.addActionListener(this);
+		thepanel.add(theclient);
 		
 		thename.setSize(300,50);
 		thename.setHorizontalAlignment(SwingConstants.CENTER);
 		thename.setLocation(665,450);
+		thename.addActionListener(this);
 		thepanel.add(thename);
+		
+		theip.setSize(300, 50);
+		theip.setLocation(665, 525);
+		theip.setEditable(false);
+		thepanel.add(theip);
+		
+		thestart.setSize(300, 50);
+		thestart.setLocation(320, 600);
+		thestart.addActionListener(this);
+		thestart.setEnabled(false);
+		thepanel.add(thestart);
+		
+		thehelp.setSize(300, 50);
+		thehelp.setLocation(665, 600);
+		thehelp.addActionListener(this);
+		thepanel.add(thehelp);
 		
 		thepanel.setPreferredSize(new Dimension(1280, 720));
 		theframe.setContentPane(thepanel);
