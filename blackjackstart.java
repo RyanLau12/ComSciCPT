@@ -19,7 +19,7 @@ public class blackjackstart implements ActionListener, KeyListener{
 	
 	//player variables
 	String strname;
-	int sum;
+	int sum;	
 	//game variables
 	int usercount;
 	String thedeck[][];
@@ -57,7 +57,13 @@ public class blackjackstart implements ActionListener, KeyListener{
 			if(strsplit[0].equals("clientConnected")){
 				usercount++;
 			}else if(strsplit[0].equals("start")){
-				
+				if(usercount == 1){
+					
+				}else if(usercount == 2){
+					
+				}else if(usercount == 3){
+					
+				}
 			}
 		}
 	}
