@@ -19,9 +19,11 @@ public class blackjackstart implements ActionListener, KeyListener{
 	
 	//player variables
 	String strname;
+	int sum;
 	//game variables
 	int usercount;
 	String thedeck[][];
+	int cardcount;
 	
 	//Methods
 	public void actionPerformed(ActionEvent evt){
@@ -41,13 +43,21 @@ public class blackjackstart implements ActionListener, KeyListener{
 		}else if(evt.getSource() == thename){
 			strname = thename.getText();
 			thename.setEditable(false);
-		}else if(evt.getSource() == thestart){
+			theserver.setEnabled(true);
+			theclient.setEnabled(true);
+		}else if(evt.getSource() == thestart){ //get new panel for main program screen
+			thepanel = new blackjackmainpanel();
+			theframe.setContentPane(thepanel);
+			theframe.pack();
 			thedeck = deckArray.theDeck();
+			ssm.sendText("start");
 		}else if(evt.getSource() == ssm){
 			strstuff = ssm.readText();
 			strsplit = strstuff.split(",");
 			if(strsplit[0].equals("clientConnected")){
 				usercount++;
+			}else if(strsplit[0].equals("start")){
+				
 			}
 		}
 	}
@@ -65,12 +75,14 @@ public class blackjackstart implements ActionListener, KeyListener{
 		theserver.setHorizontalAlignment(SwingConstants.CENTER);
 		theserver.setLocation(320,450);
 		theserver.addActionListener(this);
+		theserver.setEnabled(false);
 		thepanel.add(theserver);
 		
 		theclient.setSize(300,50);
 		theclient.setHorizontalAlignment(SwingConstants.CENTER);
 		theclient.setLocation(320,525);
 		theclient.addActionListener(this);
+		theclient.setEnabled(false);
 		thepanel.add(theclient);
 		
 		thename.setSize(300,50);
