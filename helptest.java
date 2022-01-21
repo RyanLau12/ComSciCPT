@@ -1,27 +1,37 @@
 import java.awt.*;
 import javax.swing.*;
+import java.io.*;
 import java.awt.event.*;
 import javax.swing.event.*;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.*;
 
-public class helptest{
+public class helpTest implements ActionListener{
+	//properties
+	JFrame theframe = new JFrame("Help");
+	JPanel thepanel = new blackjackhelppanel();
 	
-	help helppanel = new help();
-	JFrame theframe = new JFrame();
 	
-	public helptest(){
+	
+	
+	//methods
+	public void actionPerformed(ActionEvent evt){
+	
+	}
+	
+	//constructor
+	public helpTest(){
+		thepanel.setLayout(null);
 		
-		helppanel.setLayout(null);
-		theframe.setContentPane(helppanel);
-		theframe.pack();
+		thepanel.setPreferredSize(new Dimension(1280, 720));
+		theframe.setContentPane(thepanel);
 		theframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		theframe.setResizable(false);
-		theframe.setVisible(true); 
-		
+		theframe.pack();
+		theframe.setVisible(true);
 	}
+	//main program
 	public static void main(String[] args){
-	new helptest();
+		new helpTest();
 	}
 }
