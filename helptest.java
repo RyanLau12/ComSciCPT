@@ -10,18 +10,26 @@ public class helpTest implements ActionListener{
 	//properties
 	JFrame theframe = new JFrame("Help");
 	JPanel thepanel = new blackjackhelppanel();
+	JButton back = new JButton("back");
 	
 	
 	
 	
 	//methods
 	public void actionPerformed(ActionEvent evt){
-	
+		if(evt.getSource() == back){
+			System.out.println("back");
+		}
 	}
 	
 	//constructor
 	public helpTest(){
 		thepanel.setLayout(null);
+		
+		back.setSize(200, 60);
+		back.setLocation(1000, 100);
+		back.addActionListener(this);
+		thepanel.add(back);
 		
 		thepanel.setPreferredSize(new Dimension(1280, 720));
 		theframe.setContentPane(thepanel);
