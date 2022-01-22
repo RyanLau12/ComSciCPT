@@ -77,7 +77,7 @@ public class blackjackstart implements ActionListener, KeyListener{
 			theframe.setContentPane(thepanel);
 			theframe.pack();
 		}else if(evt.getSource() == thechat){
-			thechatdisplay.append(player.name + ": " + thechat.getText() + "\n");
+			thechatdisplay.append(player.name + ": " + thechat.getText() + "\n"); //display ur own msg in chat before ssm it
 			ssm.sendText("chat," + player.name + "," +thechat.getText());
 		}else if(evt.getSource() == ssm){
 			strstuff = ssm.readText();
