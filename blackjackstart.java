@@ -26,8 +26,18 @@ public class blackjackstart implements ActionListener, KeyListener{
 	//player variables
 	playerTesting player;
 	String strname;
+	JLabel thecards1 = new JLabel("Cards: ");
+	JLabel thecards2 = new JLabel("Cards: ");
+	JLabel thecards3 = new JLabel("Cards: ");
+	JTextField bet1 = new JTextField("Bet:");
+	JTextField bet2 = new JTextField("Bet:");
+	JTextField bet3 = new JTextField("Bet:");
+	JLabel thebank1 = new JLabel("Bank:");
+	JLabel thebank2 = new JLabel("Bank:");
+	JLabel thebank3 = new JLabel("Bank:");
+	JLabel dealercards = new JLabel("Cards");
 	//game variables
-	int usercount;
+	int usercount = 1;
 	String thedeck[][];
 	int cardcount;
 	
@@ -57,10 +67,21 @@ public class blackjackstart implements ActionListener, KeyListener{
 			thepanel = new blackjackmainpanel();
 			thepanel.add(thechat);
 			thepanel.add(thechatscroll);
+			thepanel.add(thebank1);
+			thepanel.add(bet1);
+			if(usercount == 2){
+				thepanel.add(bet2);
+				thepanel.add(thebank2);
+			}else if(usercount == 3){
+				thepanel.add(bet2);
+				thepanel.add(thebank2);
+				thepanel.add(bet3);
+				thepanel.add(thebank3);
+			}
 			theframe.setContentPane(thepanel);
 			theframe.pack();
 			thedeck = deckArray.theDeck();
-			ssm.sendText("start");
+			ssm.sendText("start," + usercount);
 		}else if(evt.getSource() == thehelp){ //help panel
 			thepanel = new blackjackhelppanel();
 			thepanel.add(helpBackButton);
@@ -90,12 +111,22 @@ public class blackjackstart implements ActionListener, KeyListener{
 				thepanel.add(thechatscroll);
 				theframe.setContentPane(thepanel);
 				theframe.pack();
-				if(usercount == 1){
-					
-				}else if(usercount == 2){
-					
-				}else if(usercount == 3){
-					
+				if(strsplit[1].equals("2")){
+					thepanel.add(thebank1);
+					thepanel.add(bet1);
+					thepanel.add(thebank2);
+					thepanel.add(bet2);
+					theframe.setContentPane(thepanel);
+					theframe.pack();
+				}else if(strsplit[1].equals("3")){
+					thepanel.add(thebank1);
+					thepanel.add(bet1);
+					thepanel.add(thebank2);
+					thepanel.add(bet2);
+					thepanel.add(thebank3);
+					thepanel.add(bet3);
+					theframe.setContentPane(thepanel);
+					theframe.pack();
 				}
 			}else if(strsplit[0].equals("chat")){
 				thechatdisplay.append(strsplit[1] + ": " + strsplit[2] + "\n"); //display username + chat msg
@@ -160,6 +191,25 @@ public class blackjackstart implements ActionListener, KeyListener{
 		thechatscroll.setSize(300, 350);
 		thechatscroll.setLocation(900, 40);
 		thechatdisplay.setEditable(false);
+		
+	
+		thebank1.setSize(100, 20);
+		thebank1.setLocation(350, 650);
+		thebank1.setForeground(Color.white);
+		bet1.setSize(100, 20);
+		bet1.setLocation(350, 630);
+		
+		thebank2.setSize(100, 20);
+		thebank2.setLocation(550, 650);
+		thebank2.setForeground(Color.white);
+		bet2.setSize(100, 20);
+		bet2.setLocation(550, 630);
+		
+		thebank3.setSize(100, 20);
+		thebank3.setLocation(750, 650);
+		thebank3.setForeground(Color.white);
+		bet3.setSize(100, 20);
+		bet3.setLocation(750, 630);
 		
 		thepanel.setPreferredSize(new Dimension(1280, 720));
 		theframe.setContentPane(thepanel);
