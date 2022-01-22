@@ -32,9 +32,9 @@ public class blackjackstart implements ActionListener, KeyListener{
 	JTextField bet1 = new JTextField("Bet:");
 	JTextField bet2 = new JTextField("Bet:");
 	JTextField bet3 = new JTextField("Bet:");
-	JLabel thebank1 = new JLabel("Bank:");
-	JLabel thebank2 = new JLabel("Bank:");
-	JLabel thebank3 = new JLabel("Bank:");
+	JLabel thebank1 = new JLabel("Bank: 5000");
+	JLabel thebank2 = new JLabel("Bank: 5000");
+	JLabel thebank3 = new JLabel("Bank: 5000");
 	JLabel dealercards = new JLabel("Cards");
 	//game variables
 	int usercount = 1;
@@ -198,18 +198,21 @@ public class blackjackstart implements ActionListener, KeyListener{
 		thebank1.setForeground(Color.white);
 		bet1.setSize(100, 20);
 		bet1.setLocation(350, 630);
+		bet1.addActionListener(this);
 		
 		thebank2.setSize(100, 20);
 		thebank2.setLocation(550, 650);
 		thebank2.setForeground(Color.white);
 		bet2.setSize(100, 20);
 		bet2.setLocation(550, 630);
+		bet2.addActionListener(this);
 		
 		thebank3.setSize(100, 20);
 		thebank3.setLocation(750, 650);
 		thebank3.setForeground(Color.white);
 		bet3.setSize(100, 20);
 		bet3.setLocation(750, 630);
+		bet3.addActionListener(this);
 		
 		thepanel.setPreferredSize(new Dimension(1280, 720));
 		theframe.setContentPane(thepanel);
