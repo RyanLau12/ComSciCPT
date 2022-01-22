@@ -16,10 +16,16 @@ public class blackjackstart implements ActionListener, KeyListener{
 	SuperSocketMaster ssm;
 	String strstuff;
 	String strsplit[] = new String[10];
+	JTextArea thechatdisplay = new JTextArea(); 
+	JScrollPane thechatscroll = new JScrollPane();
+	JTextField thechat = new JTextField();
+	
+	//help screen variables
+	JButton helpBackButton = new JButton("Back");
 	
 	//player variables
+	playerTesting player;
 	String strname;
-	int sum;	
 	//game variables
 	int usercount;
 	String thedeck[][];
@@ -33,12 +39,14 @@ public class blackjackstart implements ActionListener, KeyListener{
 			theserver.setEnabled(false);	
 			theclient.setEnabled(false);
 			thestart.setEnabled(true);
+			player = new playerTesting(strname, 5000, 0);
 			System.out.println("hi");
 		}else if(evt.getSource() == theclient){
 			ssm = new SuperSocketMaster(theip.getText(), 2188, this);
 			ssm.connect();
 			theclient.setEnabled(false);
 			theserver.setEnabled(false);
+			player = new playerTesting(strname, 5000, 0);
 			ssm.sendText("clientConnected");
 		}else if(evt.getSource() == thename){
 			strname = thename.getText();
@@ -47,16 +55,41 @@ public class blackjackstart implements ActionListener, KeyListener{
 			theclient.setEnabled(true);
 		}else if(evt.getSource() == thestart){ //get new panel for main program screen
 			thepanel = new blackjackmainpanel();
+			thepanel.add(thechat);
+			thepanel.add(thechatscroll);
 			theframe.setContentPane(thepanel);
 			theframe.pack();
 			thedeck = deckArray.theDeck();
 			ssm.sendText("start");
+		}else if(evt.getSource() == thehelp){ //help panel
+			thepanel = new blackjackhelppanel();
+			thepanel.add(helpBackButton);
+			theframe.setContentPane(thepanel);
+			theframe.pack();
+		}else if(evt.getSource() == helpBackButton){ //back to main panel
+			thepanel = new blackjackstartpanel();
+			thepanel.add(theserver);
+			thepanel.add(theclient);
+			thepanel.add(thename);
+			thepanel.add(theip);
+			thepanel.add(thestart);
+			thepanel.add(thehelp);
+			theframe.setContentPane(thepanel);
+			theframe.pack();
+		}else if(evt.getSource() == thechat){
+			thechatdisplay.append(player.name + ": " + thechat.getText() + "\n");
+			ssm.sendText("chat," + player.name + "," +thechat.getText());
 		}else if(evt.getSource() == ssm){
 			strstuff = ssm.readText();
 			strsplit = strstuff.split(",");
 			if(strsplit[0].equals("clientConnected")){
 				usercount++;
 			}else if(strsplit[0].equals("start")){
+				thepanel = new blackjackmainpanel();
+				thepanel.add(thechat);
+				thepanel.add(thechatscroll);
+				theframe.setContentPane(thepanel);
+				theframe.pack();
 				if(usercount == 1){
 					
 				}else if(usercount == 2){
@@ -64,6 +97,8 @@ public class blackjackstart implements ActionListener, KeyListener{
 				}else if(usercount == 3){
 					
 				}
+			}else if(strsplit[0].equals("chat")){
+				thechatdisplay.append(strsplit[1] + ": " + strsplit[2] + "\n"); //display username + chat msg
 			}
 		}
 	}
@@ -112,6 +147,19 @@ public class blackjackstart implements ActionListener, KeyListener{
 		thehelp.setLocation(665, 600);
 		thehelp.addActionListener(this);
 		thepanel.add(thehelp);
+		
+		helpBackButton.setSize(200, 60);
+		helpBackButton.setLocation(1100, 640);
+		helpBackButton.addActionListener(this);
+		
+		thechat.setSize(300, 20);
+		thechat.setLocation(900, 10);
+		thechat.addActionListener(this);
+		
+		thechatscroll = new JScrollPane(thechatdisplay);
+		thechatscroll.setSize(300, 350);
+		thechatscroll.setLocation(900, 40);
+		thechatdisplay.setEditable(false);
 		
 		thepanel.setPreferredSize(new Dimension(1280, 720));
 		theframe.setContentPane(thepanel);
