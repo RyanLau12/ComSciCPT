@@ -6,7 +6,9 @@ import javax.swing.event.*;
 public class blackjackstart implements ActionListener, KeyListener{
 	//Properties
 	JFrame theframe = new JFrame("Blackjack");
-	JPanel thepanel = new blackjackstartpanel();
+	JPanel startpanel = new blackjackstartpanel();
+	JPanel mainpanel = new blackjackmainpanel();
+	JPanel helppanel = new blackjackhelppanel();
 	JButton theserver = new JButton("Start as Server");
 	JTextField thename = new JTextField("Enter Username");
 	JButton theclient = new JButton("Start as Client");
@@ -19,11 +21,9 @@ public class blackjackstart implements ActionListener, KeyListener{
 	
 	//player variables
 	String strname;
-	int sum;	
 	//game variables
-	int usercount;
+	int intusercount;
 	String thedeck[][];
-	int cardcount;
 	
 	//Methods
 	public void actionPerformed(ActionEvent evt){
@@ -43,27 +43,29 @@ public class blackjackstart implements ActionListener, KeyListener{
 		}else if(evt.getSource() == thename){
 			strname = thename.getText();
 			thename.setEditable(false);
-			theserver.setEnabled(true);
-			theclient.setEnabled(true);
-		}else if(evt.getSource() == thestart){ //get new panel for main program screen
-			thepanel = new blackjackmainpanel();
-			theframe.setContentPane(thepanel);
-			theframe.pack();
+		}else if(evt.getSource() == thestart){
 			thedeck = deckArray.theDeck();
-			ssm.sendText("start");
+			startpanel.requestFocus();
+			theframe.setContentPane(startpanel);
+			theframe.pack();
+		}else if(evt.getSource() == thehelp){
+			startpanel.requestFocus();
+			theframe.setContentPane(helppanel);
+			theframe.pack();
 		}else if(evt.getSource() == ssm){
 			strstuff = ssm.readText();
 			strsplit = strstuff.split(",");
 			if(strsplit[0].equals("clientConnected")){
-				usercount++;
-			}else if(strsplit[0].equals("start")){
-				if(usercount == 1){
-					
-				}else if(usercount == 2){
-					
-				}else if(usercount == 3){
-					
-				}
+				intusercount++;
+				ssm.sendText("clientNumber,intusercount");
+			}
+			else if(strsplit[0].equals("hit")){
+			}
+			else if(strsplit[0].equals("stay")){
+			}
+			else if(strsplit[0].equals("chat")){
+			}
+			else if(strsplit[0].equals("bet")){
 			}
 		}
 	}
@@ -76,48 +78,46 @@ public class blackjackstart implements ActionListener, KeyListener{
 	
 	//Constructor
 	public blackjackstart(){
-		thepanel.setLayout(null);
+		startpanel.setLayout(null);
 		theserver.setSize(300,50);
 		theserver.setHorizontalAlignment(SwingConstants.CENTER);
 		theserver.setLocation(320,450);
 		theserver.addActionListener(this);
-		theserver.setEnabled(false);
-		thepanel.add(theserver);
+		startpanel.add(theserver);
 		
 		theclient.setSize(300,50);
 		theclient.setHorizontalAlignment(SwingConstants.CENTER);
 		theclient.setLocation(320,525);
 		theclient.addActionListener(this);
-		theclient.setEnabled(false);
-		thepanel.add(theclient);
+		startpanel.add(theclient);
 		
 		thename.setSize(300,50);
 		thename.setHorizontalAlignment(SwingConstants.CENTER);
 		thename.setLocation(665,450);
 		thename.addActionListener(this);
-		thepanel.add(thename);
+		startpanel.add(thename);
 		
 		theip.setSize(300, 50);
 		theip.setLocation(665, 525);
 		theip.setEditable(false);
-		thepanel.add(theip);
+		startpanel.add(theip);
 		
 		thestart.setSize(300, 50);
 		thestart.setLocation(320, 600);
 		thestart.addActionListener(this);
 		thestart.setEnabled(false);
-		thepanel.add(thestart);
+		startpanel.add(thestart);
 		
 		thehelp.setSize(300, 50);
 		thehelp.setLocation(665, 600);
 		thehelp.addActionListener(this);
-		thepanel.add(thehelp);
+		startpanel.add(thehelp);
 		
-		thepanel.setPreferredSize(new Dimension(1280, 720));
-		theframe.setContentPane(thepanel);
+		startpanel.setPreferredSize(new Dimension(1280, 720));
+		theframe.setContentPane(startpanel);
 		theframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		theframe.setResizable(false);
-		thepanel.requestFocus();
+		startpanel.requestFocus();
 		theframe.pack();
 		theframe.setVisible(true);
 	}

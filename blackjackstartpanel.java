@@ -10,7 +10,10 @@ public class blackjackstartpanel extends JPanel implements ActionListener{
 	//Properties
 	Timer thetimer = new Timer(1000/60, this);
 	BufferedImage theimg = null;
-	
+	Boolean blnserver = false;
+	int intclientnumber = 0;
+	int intxoffset;
+	int intyoffset;
 	//Methods
 	public void actionPerformed(ActionEvent evt){
 		if(evt.getSource() == thetimer){
@@ -21,7 +24,14 @@ public class blackjackstartpanel extends JPanel implements ActionListener{
 	//Override
 	public void paintComponent(Graphics g){
 		g.drawImage(theimg, 0, 0, null);
-		
+		if(intclientnumber == 1){
+			intxoffset = 0;
+			intyoffset = 0;
+		}
+		if(intclientnumber == 2){
+			intxoffset = 0;
+			intyoffset = 0;
+		}
 	}
 	
 	//Constructor
