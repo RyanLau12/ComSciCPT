@@ -24,7 +24,7 @@ public class blackjackhelppanel extends JPanel implements ActionListener{
 	JLabel label5 = new JLabel("Hitting will draw another card, staying means you keep what you have");
 	JLabel label6 = new JLabel("At the start of your turn, you will bet before you draw a card.");
 	JLabel label7 = new JLabel("If you get 21 with your initial 2 cards, you get 3x of your bet back. This is called Blackjack");
-	JLabel label8 = new JLabel("If, at the end of the round, you are closer 21 than everyone else, you get 2x of your bet back");
+	JLabel label8 = new JLabel("At the end of the round, if you are closer to 21 than everyone else, you get 2x of your bet back");
 	JLabel bust = new JLabel("You busted because you went over 21!");
 	JLabel stay1 = new JLabel("You chose stay. The sum of your cards is 13.");
 	JLabel stay2 = new JLabel("You chose stay. The sum of your cards is 15.");
@@ -41,22 +41,22 @@ public class blackjackhelppanel extends JPanel implements ActionListener{
 			hit.setEnabled(false);
 			if(cardCount == 2){
 				stay1.setSize(800, 20);
-				stay1.setLocation(650, 430);
+				stay1.setLocation(825, 430);
 				stay1.setForeground(Color.white);
 				this.add(stay1);
 				
 				common.setSize(800, 20);
-				common.setLocation(650, 450);
+				common.setLocation(800, 450);
 				common.setForeground(Color.white);
 				this.add(common);
 			}else if(cardCount == 3){
 				stay2.setSize(800, 20);
-				stay2.setLocation(650, 430);
+				stay2.setLocation(825, 430);
 				stay2.setForeground(Color.white);
 				this.add(stay2);
 				
 				common.setSize(800, 20);
-				common.setLocation(650, 450);
+				common.setLocation(800, 450);
 				common.setForeground(Color.white);
 				this.add(common);
 			}
@@ -66,21 +66,21 @@ public class blackjackhelppanel extends JPanel implements ActionListener{
 	//Override
 	public void paintComponent(Graphics g){
 		g.drawImage(theimg, 0, 0, null);
-		g.drawImage(card1, 600, 400, null);
-		g.drawImage(card2, 725, 400, null);
+		g.drawImage(card1, 725, 400, null);
+		g.drawImage(card2, 850, 400, null);
 		if(cardCount == 3){
-			g.drawImage(card1, 600, 400, null);
-			g.drawImage(card2, 725, 400, null);
-			g.drawImage(card3, 850, 400, null);
+			g.drawImage(card1, 725, 400, null);
+			g.drawImage(card2, 850, 400, null);
+			g.drawImage(card3, 975, 400, null);
 		}else if(cardCount == 4){
-			g.drawImage(card1, 600, 400, null);
-			g.drawImage(card2, 725, 400, null);
-			g.drawImage(card3, 850, 400, null);
-			g.drawImage(card4, 975, 400, null);
+			g.drawImage(card1, 725, 400, null);
+			g.drawImage(card2, 850, 400, null);
+			g.drawImage(card3, 975, 400, null);
+			g.drawImage(card4, 1100, 400, null);
 			hit.setEnabled(false);
 			stay.setEnabled(false);
 			bust.setSize(800, 20);
-			bust.setLocation(650,450);
+			bust.setLocation(750,450);
 			bust.setForeground(Color.white);
 			this.add(bust);
 		}
@@ -91,37 +91,37 @@ public class blackjackhelppanel extends JPanel implements ActionListener{
 		super();
 		
 		label.setSize(800, 20);
-		label.setLocation(0, 350);
+		label.setLocation(300, 450);
 		label.setForeground(Color.white);
 		this.add(label);
 		
 		label2.setSize(800, 20);
-		label2.setLocation(0, 370);
+		label2.setLocation(290, 470);
 		label2.setForeground(Color.white);
 		this.add(label2);
 		
 		label3.setSize(800, 20);
-		label3.setLocation(0, 390);
+		label3.setLocation(280, 490);
 		label3.setForeground(Color.white);
 		this.add(label3);
 		
 		label4.setSize(800, 20);
-		label4.setLocation(0, 410);
+		label4.setLocation(275, 510);
 		label4.setForeground(Color.white);
 		this.add(label4);
 		
 		label5.setSize(800, 20);
-		label5.setLocation(0, 430);
+		label5.setLocation(270, 530);
 		label5.setForeground(Color.white);
 		this.add(label5);
 		
 		label6.setSize(800, 20);
-		label6.setLocation(0, 450);
+		label6.setLocation(265, 550);
 		label6.setForeground(Color.white);
 		this.add(label6);
 		
 		label8.setSize(800, 20);
-		label8.setLocation(0, 470);
+		label8.setLocation(250, 570);
 		label8.setForeground(Color.white);
 		this.add(label8);
 		

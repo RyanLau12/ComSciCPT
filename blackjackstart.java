@@ -63,6 +63,7 @@ public class blackjackstart implements ActionListener, KeyListener{
 			thename.setEditable(false);
 			theserver.setEnabled(true);
 			theclient.setEnabled(true);
+			theip.setEditable(true);
 		}else if(evt.getSource() == thestart){ //get new panel for main program screen
 			thepanel = new blackjackmainpanel();
 			thepanel.add(thechat);
@@ -164,6 +165,7 @@ public class blackjackstart implements ActionListener, KeyListener{
 		thepanel.add(thename);
 		
 		theip.setSize(300, 50);
+		theip.setHorizontalAlignment(SwingConstants.CENTER);
 		theip.setLocation(665, 525);
 		theip.setEditable(false);
 		thepanel.add(theip);
