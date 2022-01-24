@@ -18,7 +18,7 @@ public class deckArray{
 	
 	//methods
 	public static String[][] theDeck(){
-		String[][] deck = new String[52][4]; //card name, suit,random number, imagine file name
+		String[][] deck = new String[52][4]; //card name, suit,random number, image file name
 		double dblRand;
 		int intCount;
 		int intCount1;

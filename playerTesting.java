@@ -4,6 +4,7 @@ public class playerTesting{
 	public int score;
 	public int money;
 	public int bet;
+	String strCards;
 	
 	//methods
 	
