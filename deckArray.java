@@ -94,7 +94,7 @@ public class deckArray{
 			deck[intCount][2] = dblRand + "";
 		}
 		//add image file names. NOT ACTUALLY LOADING IMAGES, only file names
-		for(intCount = 0; intCount<51; intCount++){
+		for(intCount = 0; intCount<52; intCount++){
 			deck[intCount][3] = deck[intCount][0] + deck[intCount][1] + ".png";
 		}
 		

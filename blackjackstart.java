@@ -80,8 +80,12 @@ public class blackjackstart implements ActionListener, KeyListener{
 			thepanel.add(bet1);
 			if(usercount == 2){
 				thepanel.add(thebank2);
+				thepanel.add(bet2);
 			}else if(usercount == 3){
 				thepanel.add(thebank3);
+				thepanel.add(thebank2);
+				thepanel.add(bet2);
+				thepanel.add(bet3);
 			}
 			theframe.setContentPane(thepanel);
 			theframe.pack();
@@ -112,21 +116,29 @@ public class blackjackstart implements ActionListener, KeyListener{
 		}else if(evt.getSource() == bet1){
 			betslocked++;
 			bet1.setEnabled(false);
-			if(betslocked == usercount){
-				//set screen for user if its single player
+			bet2.setEnabled(false);
+			bet3.setEnabled(false);
+			if(betslocked == usercount && usercount == 1){
+				//set screen for server if its single player
 				thehit.setEnabled(true);
 				thestay.setEnabled(true);
 				dealercards.setText(thedeck[0][0] + thedeck[0][1]);
 				thecards1.setText(thedeck[1][0] +thedeck[1][1]+ ";" + thedeck[2][0] + thedeck[2][1]);
 				thepanel.add(dealercards);
 				thepanel.add(thecards1);
+			}else if(betslocked == usercount && usercount !=1){
+				//set screen for server if its not single player
+				thehit.setEnabled(true);
+				thestay.setEnabled(true);
 			}
 		}else if(evt.getSource() == bet2 || evt.getSource() == bet3){
 			ssm.sendText("bet");
 			if(evt.getSource() == bet2){
 				bet2.setEnabled(false);
+				bet3.setEnabled(false);
 			}else if(evt.getSource() == bet3){
 				bet3.setEnabled(false);
+				bet2.setEnabled(false);
 			}	
 		}else if(evt.getSource() == ssm){
 			strstuff = ssm.readText();
@@ -135,7 +147,12 @@ public class blackjackstart implements ActionListener, KeyListener{
 				usercount++;
 				ssm.sendText("playernumber," + usercount);
 			}else if(strsplit[0].equals("playernumber")){
-				playernumber = Integer.parseInt(strsplit[1]); //assigns each client an individual player number
+				if(strsplit[1].equals("2")){
+					playernumber = Integer.parseInt(strsplit[1]); //assigns each client an individual player number
+				}else if(strsplit[1].equals("3") && playernumber != 2 && playernumber!=1){
+					playernumber = Integer.parseInt(strsplit[1]); //assigns each client an individual player number
+					//will assign player the as number 3 assuming that it is not already player 2
+				}
 				System.out.println(playernumber);
 				//since the default number is 1, the server will always have 1 
 			}else if(strsplit[0].equals("bet")){ 
@@ -156,12 +173,12 @@ public class blackjackstart implements ActionListener, KeyListener{
 						thecards1.setText(thedeck[1][0] + thedeck[1][1] + ";" + thedeck[2][0] + thedeck[2][1]);
 						thepanel.add(thecards1);
 						thecards2.setText(thedeck[3][0] + thedeck[3][1] + ";" + thedeck[4][0] + thedeck[4][1]);
-						thecards3.setText(thedeck[5][0] + thedeck[5][1] + ";" + thedeck[4][0] + thedeck[6][6]);
+						thecards3.setText(thedeck[5][0] + thedeck[5][1] + ";" + thedeck[6][0] + thedeck[6][1]);
 						thepanel.add(thecards2);
 						thepanel.add(thecards3);
 					}
 					theframe.pack();
-					ssm.sendText("betslocked," + usercount + "," + thecards1.getText() + "," + thecards2.getText() + "," + thecards3.getText());
+					ssm.sendText("betslocked," + usercount + "," + thecards1.getText() + "," + thecards2.getText() + "," + thecards3.getText() + "," + dealercards.getText());
 				}
 			}else if(strsplit[0].equals("start")){
 				thepanel = new blackjackmainpanel();
@@ -174,19 +191,15 @@ public class blackjackstart implements ActionListener, KeyListener{
 					thepanel.add(thebank2);
 					thepanel.add(bet2);
 				}else if(strsplit[1].equals("3")){
-					if(playernumber == 2){
-						thepanel.add(thebank2);
-						thepanel.add(thebank3);
-						thepanel.add(bet2);
-					}else if(playernumber == 3){
 						thepanel.add(thebank2);
 						thepanel.add(thebank3);
 						thepanel.add(bet3);
-					}
+						thepanel.add(bet2);
 				}
 				theframe.setContentPane(thepanel);
 				theframe.pack();
 			}else if(strsplit[0].equals("betslocked")){
+				dealercards.setText(strsplit[5]);
 				if(strsplit[1].equals("3")){
 					thecards1.setText(strsplit[2]);
 					thecards2.setText(strsplit[3]);
