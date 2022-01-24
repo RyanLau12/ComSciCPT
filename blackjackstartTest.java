@@ -111,6 +111,7 @@ public class blackjackstartTest implements ActionListener, KeyListener{
 			if(player.position.equals("client")){
 				ssm.sendText("hit," + player.name);
 			}else if(player.position.equals("server")){
+				//draw a new card
 				thecards1.setText(thecards1.getText() + ";" + thedeck[currentcardindex+1][0] + thedeck[currentcardindex+1][1]);
 				currentcardindex++;
 				//get the cards currently in the hand, split by ; into array
@@ -131,23 +132,19 @@ public class blackjackstartTest implements ActionListener, KeyListener{
 					thechatdisplay.append(strcardsplit[intCount] + "\n");
 				} 
 				for(intCount = 0; intCount< strcardsplit.length; intCount++){
-					if(!strcardsplit[intCount].equals(null)){
-						if(!strcardsplit[intCount].equals("J") && !strcardsplit[intCount].equals("Q") && !strcardsplit[intCount].equals("K")){
-							if(!strcardsplit[intCount].equals("A")){
-								player.score = player.score + Integer.parseInt(strcardsplit[intCount]);
-							}else if(strcardsplit[intCount].equals("A")){
-								if(player.score + 11 > 21){
-									player.score = player.score +1;
-								}else{
-									player.score = player.score + 11;
-								}
-							}
-						}else if(strcardsplit[intCount].equals("J") || strcardsplit[intCount].equals("Q") || strcardsplit[intCount].equals("K")){
+					if(strcardsplit[intCount].equals("J") || strcardsplit[intCount].equals("Q") || strcardsplit[intCount].equals("K")){
+							player.score = player.score + 11;
+					}else if(strcardsplit[intCount].equals("A")){
+						if(player.score + 11 > 21){
+							player.score = player.score +1;
+						}else{
 							player.score = player.score + 11;
 						}
+					}else{
+						player.score = player.score + Integer.parseInt(strcardsplit[intCount]);
 					}
 				}
-				thechatdisplay.append(player.score + "\n");
+				thechatdisplay.append("Sum: " + player.score + "\n");
 			}
 		}else if(evt.getSource() == thestay){
 			thestay.setEnabled(false);
@@ -165,7 +162,6 @@ public class blackjackstartTest implements ActionListener, KeyListener{
 				betslocked++;
 				if(betslocked == usercount){
 					//note that this will only trigger if the server is the last to bet.
-					ssm.sendText("allbetsin," + usercount); //let clients know that betting is over
 					//set the screen for the server.add different number of cards depending on number of players
 					dealercards.setText(thedeck[0][0] + thedeck[0][1]);
 					thepanel.add(dealercards);
@@ -189,6 +185,8 @@ public class blackjackstartTest implements ActionListener, KeyListener{
 						currentcardindex = 6;
 					}
 					theframe.pack();
+					ssm.sendText("allbetsin," + usercount + "," + dealercards.getText() + "," + thecards1.getText() + "," + thecards2.getText() + "," + thecards3.getText()); 
+					//let clients know that betting is over
 				}
 			}
 			thebet.setEnabled(false);
@@ -219,11 +217,7 @@ public class blackjackstartTest implements ActionListener, KeyListener{
 				if(betslocked == usercount){
 					dealercards.setText(thedeck[0][0] + thedeck[0][1]);
 					thepanel.add(dealercards);
-					if(usercount == 1){
-						thecards1.setText(thedeck[1][0] + thedeck [1][1] + ";" + thedeck[2][0] + thedeck[2][1]);
-						thepanel.add(thecards1);
-						currentcardindex = 2;
-					}else if(usercount == 2){
+					if(usercount == 2){
 						thecards1.setText(thedeck[1][0] + thedeck [1][1] + ";" + thedeck[2][0] + thedeck[2][1]);
 						thecards2.setText(thedeck[3][0] + thedeck [3][1] + ";" + thedeck[4][0] + thedeck[4][1]);
 						thepanel.add(thecards1);
