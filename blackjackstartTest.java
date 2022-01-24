@@ -32,6 +32,12 @@ public class blackjackstartTest implements ActionListener, KeyListener{
 	playerTesting player;
 	String strcards;
 	String strname;
+	String temp1;
+	String temp2;
+	String temp3;
+	int diff1;
+	int diff2;
+	int diff3;
 	JLabel thecards1 = new JLabel("Cards: ");
 	JLabel thecards2 = new JLabel("Cards: ");
 	JLabel thecards3 = new JLabel("Cards: ");
@@ -46,6 +52,8 @@ public class blackjackstartTest implements ActionListener, KeyListener{
 	String thedeck[][];
 	int currentcardindex;
 	int betslocked = 0;
+	int bustcount = 0;
+	int staycount = 0;
 	
 	//Methods
 	public void actionPerformed(ActionEvent evt){
@@ -72,10 +80,7 @@ public class blackjackstartTest implements ActionListener, KeyListener{
 			theclient.setEnabled(true);
 			theip.setEditable(true);
 		}else if(evt.getSource() == thestart){ //get new panel for main program screen
-			thedeck = deckArray.theDeck();
-			for(intCount =0; intCount <52;intCount++){
-				System.out.println(thedeck[intCount][0] + "," + thedeck[intCount][1] + "," + thedeck[intCount][2] + "," + thedeck[intCount][3] +"\n");
-			}
+			//thedeck = deckArray.theDeck();
 			thepanel = new blackjackmainpanel();
 			thepanel.add(thehit);
 			thepanel.add(thestay);
@@ -111,44 +116,78 @@ public class blackjackstartTest implements ActionListener, KeyListener{
 			if(player.position.equals("client")){
 				ssm.sendText("hit," + player.name);
 			}else if(player.position.equals("server")){
+				player.score = 0;
 				//draw a new card
 				thecards1.setText(thecards1.getText() + ";" + thedeck[currentcardindex+1][0] + thedeck[currentcardindex+1][1]);
 				currentcardindex++;
 				//get the cards currently in the hand, split by ; into array
 				strcardstuff = thecards1.getText();
-				strcardsplit = strcardstuff.split(";");
-				for(intCount = 0; intCount < strcardsplit.length; intCount++){
-					//take out the suit, leave only number
-					strcards = strcardsplit[intCount];
-					if(strcards.length() == 3){ //only card with length of 3 is 10
-						strcards = strcards.charAt(0) + strcards.charAt(1) + "";
-					}else if(strcards.length() == 2){
-						strcards = strcards.charAt(0) + "";
-					}
-					//put it back into the array, but now it only has the number
-					strcardsplit[intCount] = strcards;
+				player.score = player.sum(strcardstuff);
+				//thechatdisplay.append(player.score + "");
+				if(player.score > 21){
+					thehit.setEnabled(false);
+					thestay.setEnabled(false);
+					thechatdisplay.append(player.name + " busted");
+					ssm.sendText("chat," + player.name + ",busted");
+					bustcount++;
 				}
-				for(intCount = 0; intCount < strcardsplit.length; intCount++){ //for testing that the suits were actually removed
-					thechatdisplay.append(strcardsplit[intCount] + "\n");
-				} 
-				for(intCount = 0; intCount< strcardsplit.length; intCount++){
-					if(strcardsplit[intCount].equals("J") || strcardsplit[intCount].equals("Q") || strcardsplit[intCount].equals("K")){
-							player.score = player.score + 11;
-					}else if(strcardsplit[intCount].equals("A")){
-						if(player.score + 11 > 21){
-							player.score = player.score +1;
-						}else{
-							player.score = player.score + 11;
-						}
-					}else{
-						player.score = player.score + Integer.parseInt(strcardsplit[intCount]);
-					}
+				//send that server hit to update clients
+				ssm.sendText("serverhit," + thecards1.getText());
+				if((bustcount + staycount) == usercount){
+					thepanel.remove(thecards1);
+					thepanel.remove(thecards2);
+					thepanel.remove(thecards3);
+					betslocked = 0;
+					bustcount = 0;
+					staycount = 0;
+					currentcardindex = 0;
+					player.score = 0;
+					thebet.setEnabled(true);
 				}
-				thechatdisplay.append("Sum: " + player.score + "\n");
 			}
 		}else if(evt.getSource() == thestay){
 			thestay.setEnabled(false);
 			thehit.setEnabled(false);
+			if(player.position.equals("server")){
+				strcardstuff = thecards1.getText();
+				player.score = player.sum(strcardstuff);
+				temp1 = player.score + "";
+				staycount++;
+				if((bustcount + staycount) == usercount){
+						dealercards.setText(dealercards.getText() + ";" + thedeck[currentcardindex+1][0] + thedeck[currentcardindex+1][1]);
+						int dealersum = player.sum(dealercards.getText());
+						currentcardindex++;
+						while(dealersum < 17){
+							//give more cards to dealer until hes at 17 or busted
+							dealercards.setText(dealercards.getText() + ";" + thedeck[currentcardindex+1][0] + thedeck[currentcardindex+1][1]);
+							dealersum = player.sum(dealercards.getText());
+							currentcardindex++;
+						}
+						if(dealersum > 21){
+								ssm.sendText("dealerbust,");
+								player.money = player.money + (player.bet * 2);
+								thebank.setText(player.money + "");
+							}
+						if(dealersum <=21){
+							diff1 = 21 - player.sum(thecards1.getText());
+							if(diff1 < (21-dealersum)){
+								player.money = player.money + (player.bet * 2 );
+								thebank.setText(player.money + "");
+							}
+						}
+						thepanel.remove(thecards1);
+						thepanel.remove(thecards2);
+						thepanel.remove(thecards3);
+						betslocked = 0;
+						bustcount = 0;
+						staycount = 0;
+						currentcardindex = 0;
+						player.score = 0;
+						thebet.setEnabled(true);
+					}
+			}else if(player.position.equals("client")){
+				ssm.sendText("stay," + player.name);
+			}
 			
 		}else if(evt.getSource() == thebet){
 			thehit.setEnabled(true);
@@ -161,6 +200,7 @@ public class blackjackstartTest implements ActionListener, KeyListener{
 			}else if(player.position.equals("server")){
 				betslocked++;
 				if(betslocked == usercount){
+					thedeck = deckArray.theDeck();
 					//note that this will only trigger if the server is the last to bet.
 					//set the screen for the server.add different number of cards depending on number of players
 					dealercards.setText(thedeck[0][0] + thedeck[0][1]);
@@ -187,6 +227,37 @@ public class blackjackstartTest implements ActionListener, KeyListener{
 					theframe.pack();
 					ssm.sendText("allbetsin," + usercount + "," + dealercards.getText() + "," + thecards1.getText() + "," + thecards2.getText() + "," + thecards3.getText()); 
 					//let clients know that betting is over
+					player.score = player.sum(thecards1.getText());
+					if(player.score > 21){
+						thepanel.remove(thecards1);
+						thepanel.remove(thecards2);
+						thepanel.remove(thecards3);
+						betslocked = 0;
+						bustcount = 0;
+						staycount = 0;
+						currentcardindex = 0;
+						player.score = 0;
+						thebet.setEnabled(true);
+					}else if(player.score == 21){
+						thepanel.remove(thecards1);
+						thepanel.remove(thecards2);
+						thepanel.remove(thecards3);
+						betslocked = 0;
+						bustcount = 0;
+						staycount = 0;
+						currentcardindex = 0;
+						player.score = 0;
+						player.money = player.money + player.bet*3;
+						thebet.setEnabled(true);
+					}
+				}else if(betslocked != usercount){ //assuming not single player
+					player.score = player.sum(thecards1.getText());
+					if(player.score > 21){
+						bustcount++;
+					}else if(player.score == 21){
+						staycount++;
+						player.money = player.money + player.bet *3;
+					}
 				}
 			}
 			thebet.setEnabled(false);
@@ -212,29 +283,32 @@ public class blackjackstartTest implements ActionListener, KeyListener{
 			}else if(strsplit[0].equals("chat")){
 				thechatdisplay.append(strsplit[1] + ": " + strsplit[2] + "\n"); //display username + chat msg
 			}else if(strsplit[0].equals("bet")){  //note: "bet" is sent from client to server
-				betslocked++;
-				//if the client is the last to bet, the server must also let clients know that betting is over
-				if(betslocked == usercount){
-					dealercards.setText(thedeck[0][0] + thedeck[0][1]);
-					thepanel.add(dealercards);
-					if(usercount == 2){
-						thecards1.setText(thedeck[1][0] + thedeck [1][1] + ";" + thedeck[2][0] + thedeck[2][1]);
-						thecards2.setText(thedeck[3][0] + thedeck [3][1] + ";" + thedeck[4][0] + thedeck[4][1]);
-						thepanel.add(thecards1);
-						thepanel.add(thecards2);
-						currentcardindex = 4;
-					}else if(usercount == 3){
-						thecards1.setText(thedeck[1][0] + thedeck [1][1] + ";" + thedeck[2][0] + thedeck[2][1]);
-						thecards2.setText(thedeck[3][0] + thedeck [3][1] + ";" + thedeck[4][0] + thedeck[4][1]);
-						thecards3.setText(thedeck[5][0] + thedeck [5][1] + ";" + thedeck[6][0] + thedeck[6][1]);
-						thepanel.add(thecards1);
-						thepanel.add(thecards2);
-						thepanel.add(thecards3);
-						currentcardindex = 6;
+				if(player.position.equals("server")){
+					betslocked++;
+					//if the client is the last to bet, the server must also let clients know that betting is over
+					if(betslocked == usercount){
+						thedeck = deckArray.theDeck();
+						dealercards.setText(thedeck[0][0] + thedeck[0][1]);
+						thepanel.add(dealercards);
+						if(usercount == 2){
+							thecards1.setText(thedeck[1][0] + thedeck [1][1] + ";" + thedeck[2][0] + thedeck[2][1]);
+							thecards2.setText(thedeck[3][0] + thedeck [3][1] + ";" + thedeck[4][0] + thedeck[4][1]);
+							thepanel.add(thecards1);
+							thepanel.add(thecards2);
+							currentcardindex = 4;
+						}else if(usercount == 3){
+							thecards1.setText(thedeck[1][0] + thedeck [1][1] + ";" + thedeck[2][0] + thedeck[2][1]);
+							thecards2.setText(thedeck[3][0] + thedeck [3][1] + ";" + thedeck[4][0] + thedeck[4][1]);
+							thecards3.setText(thedeck[5][0] + thedeck [5][1] + ";" + thedeck[6][0] + thedeck[6][1]);
+							thepanel.add(thecards1);
+							thepanel.add(thecards2);
+							thepanel.add(thecards3);
+							currentcardindex = 6;
+						}
+						theframe.pack();
+						ssm.sendText("allbetsin," + usercount + "," + dealercards.getText() + "," + thecards1.getText() + "," + thecards2.getText() + "," + thecards3.getText()); 
+						//because usercount is stored in the server, this is needed to let clients know that bets done
 					}
-					theframe.pack();
-					ssm.sendText("allbetsin," + usercount + "," + dealercards.getText() + "," + thecards1.getText() + "," + thecards2.getText() + "," + thecards3.getText()); 
-					//because usercount is stored in the server, this is needed to let clients know that bets done
 				}
 			}else if(strsplit[0].equals("allbetsin")){ //allbetsin is sent from server to client
 				//set screens for clients
@@ -245,6 +319,14 @@ public class blackjackstartTest implements ActionListener, KeyListener{
 					thepanel.add(dealercards);
 					thepanel.add(thecards1);
 					thepanel.add(thecards2);
+					player.score = player.sum(thecards2.getText());
+					if(player.score > 21){
+						ssm.sendText("clientbust," + player.name);
+					}else if(player.score == 21){
+						ssm.sendText("clientstay," + player.name);
+						player.money = player.money + player.bet*3;
+					}
+					
 				}else if(strsplit[1].equals("3")){
 					dealercards.setText(strsplit[2]);
 					thecards1.setText(strsplit[3]);
@@ -256,6 +338,106 @@ public class blackjackstartTest implements ActionListener, KeyListener{
 					thepanel.add(thecards3);
 				}
 				theframe.pack();
+			}else if(strsplit[0].equals("stay")){ //"stay" is sent from client to server
+				staycount++;
+				ssm.sendText("clientstay," +strsplit[1] + ","+ usercount);
+			}else if(strsplit[0].equals("clientstay")){
+				if(strsplit[2].equals("2")){
+					strcardstuff = thecards2.getText();
+					player.score = player.sum(strcardstuff);
+					ssm.sendText("clientsum," + player.score); //let server know the client sum after client stays
+				}
+			}else if(strsplit[0].equals("clientsum")){
+				//happening inside server
+				if(usercount == 2){
+					if((bustcount + staycount) == usercount){
+						dealercards.setText(dealercards.getText() + ";" + thedeck[currentcardindex+1][0] + thedeck[currentcardindex+1][1]);
+						int dealersum = player.sum(dealercards.getText());
+						currentcardindex++;
+						while(dealersum < 17){
+							//give more cards to dealer until hes at 17 or busted
+							dealercards.setText(dealercards.getText() + ";" + thedeck[currentcardindex+1][0] + thedeck[currentcardindex+1][1]);
+							dealersum = player.sum(dealercards.getText());
+							currentcardindex++;
+						}
+						if(dealersum > 21){
+								ssm.sendText("dealerbust,");
+								player.money = player.money + (player.bet * 2);
+								thebank.setText(player.money + "");
+						}
+						if(dealersum <=21){
+							diff1 = 21 - player.sum(thecards1.getText());
+							diff2 = 21 -player.sum(thecards2.getText());
+							if(diff1 < (21-dealersum)){
+								player.money = player.money + (player.bet * 2 );
+								thebank.setText(player.money + "");
+							}if(diff2 < (21-dealersum)){
+								ssm.sendText("p2win," + usercount);
+							}
+						}
+						ssm.sendText("dealercards," + dealercards.getText()); //send cards to client
+						thepanel.remove(thecards1);
+						thepanel.remove(thecards2);
+						thepanel.remove(thecards3);
+						betslocked = 0;
+						bustcount = 0;
+						staycount = 0;
+						currentcardindex = 0;
+						player.score = 0;
+						thebet.setEnabled(true);
+						ssm.sendText("newround");
+					}
+				}
+			}else if(strsplit[0].equals("dealercards")){
+				System.out.println("HI");
+				dealercards.setText(strsplit[1]);
+			}else if(strsplit[0].equals("dealerbust")){
+				player.money = player.money + (player.bet *2);
+				thebank.setText(player.money +"");
+			}else if(strsplit[0].equals("p2win")){
+				if(strsplit[1].equals("2")){
+					player.money = player.money + (player.bet *2);
+					thebank.setText(player.money + "");
+				}
+			}else if(strsplit[0].equals("hit")){ //hit is sent from client to server
+				ssm.sendText("clienthit," +strsplit[1] + "," +  usercount + "," + thedeck[currentcardindex+1][0] + thedeck[currentcardindex+1][1]);
+				if(usercount == 2){
+					//update the screen for the server
+					thecards2.setText(thecards2.getText() + ";" + thedeck[currentcardindex+1][0] + thedeck[currentcardindex+1][1]);
+				}
+				//send from server to client. will send "clienthit," the name of the client who it goes to, usercount, and the card
+				currentcardindex++;
+			}else if(strsplit[0].equals("clienthit")){ //client hit is sent from server to client
+				if(strsplit[2].equals("2")){
+					//update the screen for the client
+					thecards2.setText(thecards2.getText() + ";" + strsplit[3]);
+					strcardstuff = thecards2.getText();
+					player.score = player.sum(strcardstuff);
+					if(player.score > 21){
+						thechatdisplay.append(player.name + " busted" + "\n");
+						thehit.setEnabled(false);
+						thestay.setEnabled(false);
+						ssm.sendText("clientbust," + player.name); //if bust, let server know
+					}				
+				}
+			}else if(strsplit[0].equals("serverhit")){
+				thecards1.setText(strsplit[1]);
+			}else if(strsplit[0].equals("clientbust")){
+				thechatdisplay.append(strsplit[1] + " busted" + "\n");
+				bustcount++; 
+				if((bustcount + staycount) == usercount){
+					ssm.sendText("newround");
+				}
+			}else if(strsplit[0].equals("newround")){
+				thepanel.remove(thecards1);
+				thepanel.remove(thecards2);
+				thepanel.remove(thecards3);
+				betslocked = 0;
+				bustcount = 0;
+				staycount = 0;
+				currentcardindex = 0;
+				player.score = 0;
+				thebet.setEnabled(true);
 			}
 		}
 	}
