@@ -3,7 +3,7 @@ import javax.swing.*;
 import java.awt.event.*;
 import javax.swing.event.*;
 
-public class blackjackstartTest3 implements ActionListener, KeyListener{
+public class blackjackstartTest2 implements ActionListener, KeyListener{
 	//Properties
 	JFrame theframe = new JFrame("Blackjack");
 	JPanel thepanel = new blackjackstartpanel();
@@ -126,7 +126,7 @@ public class blackjackstartTest3 implements ActionListener, KeyListener{
 					thehit.setEnabled(false);
 					thestay.setEnabled(false);
 					bustcount++;
-					thechatdisplay.append(player.name + " busted" + "\n");
+					thechatdisplay.append(player.name + " busted");
 				}
 			}
 		}else if(evt.getSource() == thestay){
@@ -198,7 +198,7 @@ public class blackjackstartTest3 implements ActionListener, KeyListener{
 					if(player.sum(thecards1.getText()) > 21){
 							bustcount++;
 							ssm.sendText("serverbust," + player.name);
-							thechatdisplay.append(player.name + " busted" + "\n");
+							thechatdisplay.append(player.name + " busted");
 					}else if(player.sum(thecards1.getText()) == 21){
 						staycount++;
 						player.money = player.money + player.bet *3;
@@ -226,8 +226,8 @@ public class blackjackstartTest3 implements ActionListener, KeyListener{
 				bustcount = 0;
 				betslocked = 0;
 				thebet.setEnabled(false);
-				ssm.sendText("chat," + player.name + " is broke" + "\n");
-				thechatdisplay.append(player.name + " is broke" + "\n");
+				ssm.sendText("chat," + player.name + " is broke \n");
+				thechatdisplay.append(player.name + " is broke \n");
 				
 			}
 			ssm.sendText("nextround");
@@ -292,7 +292,7 @@ public class blackjackstartTest3 implements ActionListener, KeyListener{
 					if(player.score > 21){
 						bustcount++;
 						ssm.sendText("clientbust," + player.name);
-						thechatdisplay.append(player.name + " busted" + "\n");
+						thechatdisplay.append(player.name + " busted");
 					}else if(player.sum(thecards2.getText()) == 21){
 						player.money = player.money + player.bet *3;
 						ssm.sendText("clientblackjack");
@@ -395,7 +395,7 @@ public class blackjackstartTest3 implements ActionListener, KeyListener{
 				}else{
 					thebet.setEnabled(false);
 					ssm.sendText("clientbroke," + player.name);
-					thechatdisplay.append(player.name + " is broke" + "\n");
+					thechatdisplay.append(player.name + " is broke");
 					ssm.sendText("chat," + player.name + " is broke");
 				}
 			}else if(strsplit[0].equals("clientbroke")){
@@ -416,7 +416,7 @@ public class blackjackstartTest3 implements ActionListener, KeyListener{
 	}
 	
 	//Constructor
-	public blackjackstartTest3(){
+	public blackjackstartTest2(){
 		thepanel.setLayout(null);
 		theserver.setSize(300,50);
 		theserver.setHorizontalAlignment(SwingConstants.CENTER);
@@ -519,6 +519,6 @@ public class blackjackstartTest3 implements ActionListener, KeyListener{
 	
 	//Main Program
 	public static void main(String[] args){
-		new blackjackstartTest3();
+		new blackjackstartTest2();
 	}
 }
