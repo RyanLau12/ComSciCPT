@@ -122,10 +122,11 @@ public class blackjackstartTest2 implements ActionListener, KeyListener{
 				ssm.sendText("serverhit," + thecards1.getText());
 				player.score = player.sum(thecards1.getText());
 				if(player.score > 21){
-					ssm.sendText("serverbust");
+					ssm.sendText("serverbust," + player.name);
 					thehit.setEnabled(false);
 					thestay.setEnabled(false);
 					bustcount++;
+					thechatdisplay.append(player.name + " busted");
 				}
 			}
 		}else if(evt.getSource() == thestay){
@@ -196,7 +197,8 @@ public class blackjackstartTest2 implements ActionListener, KeyListener{
 					}
 					if(player.sum(thecards1.getText()) > 21){
 							bustcount++;
-							ssm.sendText("serverbust");
+							ssm.sendText("serverbust," + player.name);
+							thechatdisplay.append(player.name + " busted");
 					}else if(player.sum(thecards1.getText()) == 21){
 						staycount++;
 						player.money = player.money + player.bet *3;
@@ -268,7 +270,8 @@ public class blackjackstartTest2 implements ActionListener, KeyListener{
 						player.score = player.sum(thecards1.getText());
 						if(player.score > 21){
 							bustcount++;
-							ssm.sendText("serverbust");
+							ssm.sendText("serverbust," + player.name);
+							thechatdisplay.append(player.name + " busted");
 						}
 						//thechatdisplay.append(player.position + " score: " + player.score);
 						theframe.pack();
@@ -288,7 +291,8 @@ public class blackjackstartTest2 implements ActionListener, KeyListener{
 					player.score = player.sum(thecards2.getText());
 					if(player.score > 21){
 						bustcount++;
-						ssm.sendText("clientbust");
+						ssm.sendText("clientbust," + player.name);
+						thechatdisplay.append(player.name + " busted");
 					}else if(player.sum(thecards2.getText()) == 21){
 						player.money = player.money + player.bet *3;
 						ssm.sendText("clientblackjack");
@@ -310,10 +314,11 @@ public class blackjackstartTest2 implements ActionListener, KeyListener{
 				if(player.score > 21){
 					thehit.setEnabled(false);
 					thestay.setEnabled(false);
-					ssm.sendText("clientbust");
+					ssm.sendText("clientbust," + player.name);
 				}
 			}else if(strsplit[0].equals("clientbust")){
 				bustcount++;
+				thechatdisplay.append(strsplit[1] + " busted");
 				if((bustcount + staycount) == usercount){
 					dealercards.setText(dealercards.getText() + ";" + thedeck[currentcardindex+1][0] + thedeck[currentcardindex+1][1]);
 					int dealersum = player.sum(dealercards.getText());
