@@ -41,6 +41,7 @@ public class blackjackstartTest3 implements ActionListener, KeyListener{
 	int diff3;
 	JLabel thecards1 = new JLabel();
 	JLabel thecards2 = new JLabel();
+	JLabel thecards3 = new JLabel();
 	JTextField thebet= new JTextField();
 	JLabel bet = new JLabel("Bet: ");
 	JLabel thebank = new JLabel();
@@ -194,6 +195,14 @@ public class blackjackstartTest3 implements ActionListener, KeyListener{
 						thepanel.add(thecards1);
 						thepanel.add(thecards2);
 						currentcardindex = 4;
+					}else if(usercount == 2){
+						thecards1.setText(thedeck[1][0] + thedeck [1][1] + ";" + thedeck[2][0] + thedeck[2][1]);
+						thecards2.setText(thedeck[3][0] + thedeck [3][1] + ";" + thedeck[4][0] + thedeck[4][1]);
+						thecards3.setText(thedeck[4][0] + thedeck [4][1] + ";" + thedeck[5][0] + thedeck[5][1]);
+						thepanel.add(thecards1);
+						thepanel.add(thecards2);
+						thepanel.add(thecards3);
+						currentcardindex = 6;
 					}
 					if(player.sum(thecards1.getText()) > 21){
 							bustcount++;
@@ -266,6 +275,15 @@ public class blackjackstartTest3 implements ActionListener, KeyListener{
 							thepanel.add(thecards1);
 							thepanel.add(thecards2);
 							currentcardindex = 4;
+						}
+						if(usercount == 3){
+							thecards1.setText(thedeck[1][0] + thedeck [1][1] + ";" + thedeck[2][0] + thedeck[2][1]);
+							thecards2.setText(thedeck[3][0] + thedeck [3][1] + ";" + thedeck[4][0] + thedeck[4][1]);
+							thecards3.setText(thedeck[4][0] + thedeck [4][1] + ";" + thedeck[5][0] + thedeck[5][1]);
+							thepanel.add(thecards1);
+							thepanel.add(thecards2);
+							thepanel.add(thecards3);
+							currentcardindex = 6;
 						}
 						player.score = player.sum(thecards1.getText());
 						if(player.score > 21){
