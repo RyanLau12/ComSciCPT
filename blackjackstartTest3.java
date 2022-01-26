@@ -3,7 +3,7 @@ import javax.swing.*;
 import java.awt.event.*;
 import javax.swing.event.*;
 
-public class blackjackstartTest2 implements ActionListener, KeyListener{
+public class blackjackstartTest3 implements ActionListener, KeyListener{
 	//Properties
 	JFrame theframe = new JFrame("Blackjack");
 	JPanel thepanel = new blackjackstartpanel();
@@ -416,7 +416,7 @@ public class blackjackstartTest2 implements ActionListener, KeyListener{
 	}
 	
 	//Constructor
-	public blackjackstartTest2(){
+	public blackjackstartTest3(){
 		thepanel.setLayout(null);
 		theserver.setSize(300,50);
 		theserver.setHorizontalAlignment(SwingConstants.CENTER);
@@ -519,6 +519,6 @@ public class blackjackstartTest2 implements ActionListener, KeyListener{
 	
 	//Main Program
 	public static void main(String[] args){
-		new blackjackstartTest2();
+		new blackjackstartTest3();
 	}
 }
