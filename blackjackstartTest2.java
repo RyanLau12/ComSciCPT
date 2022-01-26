@@ -150,8 +150,10 @@ public class blackjackstartTest2 implements ActionListener, KeyListener{
 					}
 					if(dealersum > 21){
 						ssm.sendText("dealerbust,");
-						player.money = player.money + (player.bet * 2);
-						thebank.setText(player.money + "");
+						if(player.sum(thecards1.getText()) <= 21){
+							player.money = player.money + (player.bet * 2);
+							thebank.setText(player.money + "");
+						}
 					}
 					if(dealersum <=21){
 						diff1 = 21 - player.sum(thecards1.getText());
@@ -195,6 +197,9 @@ public class blackjackstartTest2 implements ActionListener, KeyListener{
 					if(player.sum(thecards1.getText()) > 21){
 							bustcount++;
 							ssm.sendText("serverbust");
+					}else if(player.sum(thecards1.getText()) == 21){
+						staycount++;
+						player.money = player.money + player.bet *3;
 					}
 					theframe.pack();
 					player.score = player.sum(thecards1.getText());
@@ -215,6 +220,10 @@ public class blackjackstartTest2 implements ActionListener, KeyListener{
 				thebet.setEnabled(true);
 			}else{
 				usercount--;
+				staycount = 0;
+				bustcount = 0;
+				betslocked = 0;
+				thebet.setEnabled(false);
 				ssm.sendText("chat," + player.name + " is broke \n");
 				thechatdisplay.append(player.name + " is broke \n");
 				
@@ -280,6 +289,9 @@ public class blackjackstartTest2 implements ActionListener, KeyListener{
 					if(player.score > 21){
 						bustcount++;
 						ssm.sendText("clientbust");
+					}else if(player.sum(thecards2.getText()) == 21){
+						player.money = player.money + player.bet *3;
+						ssm.sendText("clientblackjack");
 					}
 					//thechatdisplay.append(player.position + " score: " + player.score);
 				}
@@ -315,8 +327,10 @@ public class blackjackstartTest2 implements ActionListener, KeyListener{
 					}
 					if(dealersum > 21){
 						ssm.sendText("dealerbust,");
-						player.money = player.money + (player.bet * 2);
-						thebank.setText(player.money + "");
+						if(player.sum(thecards1.getText()) <= 21){
+							player.money = player.money + (player.bet * 2);
+							thebank.setText(player.money + "");
+						}
 					}
 					if(dealersum <=21){
 						diff1 = 21 - player.sum(thecards1.getText());
@@ -332,8 +346,10 @@ public class blackjackstartTest2 implements ActionListener, KeyListener{
 			}else if(strsplit[0].equals("dealercards")){ //update dealer cards on the client side
 				dealercards.setText(strsplit[1]);
 			}else if(strsplit[0].equals("dealerbust") || strsplit[0].equals("p2win")){
-				player.money = player.money + (player.bet *2);
-				thebank.setText(player.money + "");
+				if(player.sum(thecards2.getText()) <= 21){
+					player.money = player.money + (player.bet *2);
+					thebank.setText(player.money + "");
+				}
 			}else if(strsplit[0].equals("clientstay")){
 				staycount++;
 				if((bustcount + staycount) == usercount){
@@ -348,9 +364,11 @@ public class blackjackstartTest2 implements ActionListener, KeyListener{
 						currentcardindex++;
 					}
 					if(dealersum > 21){
+						if(player.sum(thecards1.getText()) <= 21){
+							player.money = player.money + (player.bet * 2);
+							thebank.setText(player.money + "");
+						}
 						ssm.sendText("dealerbust,");
-						player.money = player.money + (player.bet * 2);
-						thebank.setText(player.money + "");
 					}
 					if(dealersum <=21){
 						diff1 = 21 - player.sum(thecards1.getText());
@@ -370,12 +388,18 @@ public class blackjackstartTest2 implements ActionListener, KeyListener{
 					thepanel.remove(dealercards);
 					thebet.setEnabled(true);
 				}else{
+					thebet.setEnabled(false);
 					ssm.sendText("clientbroke," + player.name);
 					thechatdisplay.append(player.name + " is broke");
 					ssm.sendText("chat," + player.name + " is broke");
 				}
 			}else if(strsplit[0].equals("clientbroke")){
 				usercount--;
+				staycount = 0;
+				bustcount = 0;
+				betslocked = 0;
+			}else if(strsplit[0].equals("clientblackjack")){
+				staycount++;
 			}
 		}
 	}
