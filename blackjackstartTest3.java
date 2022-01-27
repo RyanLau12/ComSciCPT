@@ -50,6 +50,7 @@ public class blackjackstartTest3 implements ActionListener, KeyListener{
 	int playernumber = 1; //default player number is 1, the server. will increase to 2 or if its client
 	//game variables
 	int usercount = 1;
+	int clientnumber = 0;
 	String thedeck[][];
 	int currentcardindex;
 	int betslocked = 0;
@@ -179,6 +180,7 @@ public class blackjackstartTest3 implements ActionListener, KeyListener{
 				ssm.sendText("bet," + thebet.getText());
 			}else if(player.position.equals("server")){
 				betslocked++;
+				System.out.println(betslocked + " " + usercount);
 				if(betslocked == usercount){
 					thedeck = deckArray.theDeck();
 					//note that this will only trigger if the server is the last to bet.
@@ -195,7 +197,7 @@ public class blackjackstartTest3 implements ActionListener, KeyListener{
 						thepanel.add(thecards1);
 						thepanel.add(thecards2);
 						currentcardindex = 4;
-					}else if(usercount == 2){
+					}else if(usercount == 3){
 						thecards1.setText(thedeck[1][0] + thedeck [1][1] + ";" + thedeck[2][0] + thedeck[2][1]);
 						thecards2.setText(thedeck[3][0] + thedeck [3][1] + ";" + thedeck[4][0] + thedeck[4][1]);
 						thecards3.setText(thedeck[4][0] + thedeck [4][1] + ";" + thedeck[5][0] + thedeck[5][1]);
@@ -211,6 +213,8 @@ public class blackjackstartTest3 implements ActionListener, KeyListener{
 					}else if(player.sum(thecards1.getText()) == 21){
 						staycount++;
 						player.money = player.money + player.bet *3;
+						thebank.setText(player.money + "");
+						System.out.println("running");
 					}
 					theframe.pack();
 					player.score = player.sum(thecards1.getText());
@@ -245,6 +249,9 @@ public class blackjackstartTest3 implements ActionListener, KeyListener{
 			strsplit = strstuff.split(",");
 			if(strsplit[0].equals("clientConnected")){ //for keeping track of users
 				usercount++;
+				ssm.sendText("clientnumber");
+			}else if(strsplit[0].equals("clientnumber")){
+				clientnumber = clientnumber + 1;
 			}else if(strsplit[0].equals("start")){
 				thepanel = new blackjackmainpanel();
 				thepanel.add(thehit);
