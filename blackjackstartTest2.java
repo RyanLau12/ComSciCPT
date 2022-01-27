@@ -2,6 +2,7 @@ import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
 import javax.swing.event.*;
+import java.io.*;
 
 public class blackjackstartTest2 implements ActionListener, KeyListener{
 	//Properties
@@ -202,6 +203,15 @@ public class blackjackstartTest2 implements ActionListener, KeyListener{
 					}else if(player.sum(thecards1.getText()) == 21){
 						staycount++;
 						player.money = player.money + player.bet *3;
+						thebank.setText(player.money + "");
+						try{
+							PrintWriter blackjack = new PrintWriter(new FileWriter("blackjack", true));
+							blackjack.println(player.name + "blackjack");
+							blackjack.close();
+						}
+						catch(IOException e){
+							System.out.println("error printing to file");
+						}
 					}
 					theframe.pack();
 					player.score = player.sum(thecards1.getText());
@@ -295,7 +305,16 @@ public class blackjackstartTest2 implements ActionListener, KeyListener{
 						thechatdisplay.append(player.name + " busted");
 					}else if(player.sum(thecards2.getText()) == 21){
 						player.money = player.money + player.bet *3;
+						thebank.setText(player.money + "");
 						ssm.sendText("clientblackjack");
+						try{
+							PrintWriter blackjack = new PrintWriter(new FileWriter("blackjack", true));
+							blackjack.println(player.name + "blackjack");
+							blackjack.close();
+						}
+						catch(IOException e){
+							System.out.println("error printing to file");
+						}
 					}
 					//thechatdisplay.append(player.position + " score: " + player.score);
 				}
