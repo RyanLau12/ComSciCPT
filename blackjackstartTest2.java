@@ -67,14 +67,14 @@ public class blackjackstartTest2 implements ActionListener, KeyListener{
 			theserver.setEnabled(false);	
 			theclient.setEnabled(false);
 			thestart.setEnabled(true);
-			player = new playerTesting(strname, 5000, 0);
+			player = new playerTesting(strname, 1000, 0);
 			player.position = "server";
 		}else if(evt.getSource() == theclient){
 			ssm = new SuperSocketMaster(theip.getText(), 2188, this);
 			ssm.connect();
 			theclient.setEnabled(false);
 			theserver.setEnabled(false);
-			player = new playerTesting(strname, 2000, 0);
+			player = new playerTesting(strname, 1000, 0);
 			player.position = "client";
 			ssm.sendText("clientConnected");
 		}else if(evt.getSource() == thename){ //set username
@@ -427,6 +427,8 @@ public class blackjackstartTest2 implements ActionListener, KeyListener{
 				betslocked = 0;
 			}else if(strsplit[0].equals("clientblackjack")){
 				staycount++;
+			}else if(strsplit[0].equals("serverbust")){
+				thechatdisplay.append(strsplit[1] + " busted \n");
 			}
 		}
 	}
