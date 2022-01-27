@@ -337,6 +337,7 @@ public class blackjackstartTest2 implements ActionListener, KeyListener{
 					thehit.setEnabled(false);
 					thestay.setEnabled(false);
 					ssm.sendText("clientbust," + player.name);
+					thechatdisplay.append(player.name + " busted \n");
 				}
 			}else if(strsplit[0].equals("clientbust")){
 				bustcount++;
