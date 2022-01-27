@@ -6,6 +6,7 @@ import java.io.*;
 
 public class blackjackstartTest2 implements ActionListener, KeyListener{
 	//Properties
+	/** Properties for the game */ 
 	JFrame theframe = new JFrame("Blackjack");
 	JPanel thepanel = new blackjackstartpanel();
 	JButton theserver = new JButton("Start as Server");
@@ -31,6 +32,7 @@ public class blackjackstartTest2 implements ActionListener, KeyListener{
 	JButton helpBackButton = new JButton("Back");
 	
 	//player variables
+	/** Main gameplay variables */ 
 	playerTesting player;
 	String strcards;
 	String strname;
@@ -57,6 +59,7 @@ public class blackjackstartTest2 implements ActionListener, KeyListener{
 	int staycount = 0;
 	
 	//Methods
+	/** ActionPerformed method. Keeps track of button presses, chat, etc */ 
 	public void actionPerformed(ActionEvent evt){
 		if(evt.getSource() == theserver){
 			ssm = new SuperSocketMaster(2188, this);	
@@ -199,7 +202,7 @@ public class blackjackstartTest2 implements ActionListener, KeyListener{
 					if(player.sum(thecards1.getText()) > 21){
 							bustcount++;
 							ssm.sendText("serverbust," + player.name);
-							thechatdisplay.append(player.name + " busted");
+							thechatdisplay.append(player.name + " busted \n");
 					}else if(player.sum(thecards1.getText()) == 21){
 						staycount++;
 						player.money = player.money + player.bet *3;
@@ -281,7 +284,7 @@ public class blackjackstartTest2 implements ActionListener, KeyListener{
 						if(player.score > 21){
 							bustcount++;
 							ssm.sendText("serverbust," + player.name);
-							thechatdisplay.append(player.name + " busted");
+							thechatdisplay.append(player.name + " busted \n");
 						}
 						//thechatdisplay.append(player.position + " score: " + player.score);
 						theframe.pack();
@@ -302,7 +305,7 @@ public class blackjackstartTest2 implements ActionListener, KeyListener{
 					if(player.score > 21){
 						bustcount++;
 						ssm.sendText("clientbust," + player.name);
-						thechatdisplay.append(player.name + " busted");
+						thechatdisplay.append(player.name + " busted \n");
 					}else if(player.sum(thecards2.getText()) == 21){
 						player.money = player.money + player.bet *3;
 						thebank.setText(player.money + "");
@@ -337,7 +340,7 @@ public class blackjackstartTest2 implements ActionListener, KeyListener{
 				}
 			}else if(strsplit[0].equals("clientbust")){
 				bustcount++;
-				thechatdisplay.append(strsplit[1] + " busted");
+				thechatdisplay.append(strsplit[1] + " busted \n");
 				if((bustcount + staycount) == usercount){
 					dealercards.setText(dealercards.getText() + ";" + thedeck[currentcardindex+1][0] + thedeck[currentcardindex+1][1]);
 					int dealersum = player.sum(dealercards.getText());
@@ -427,14 +430,18 @@ public class blackjackstartTest2 implements ActionListener, KeyListener{
 			}
 		}
 	}
+	/** does nothing */
 	public void keyReleased(KeyEvent evt){
 	}
+	/** does nothing */
 	public void keyPressed(KeyEvent evt){
 	}
+	/** does nothing */
 	public void keyTyped(KeyEvent evt){
 	}
 	
 	//Constructor
+	/** Constructor */ 
 	public blackjackstartTest2(){
 		thepanel.setLayout(null);
 		theserver.setSize(300,50);
@@ -537,6 +544,7 @@ public class blackjackstartTest2 implements ActionListener, KeyListener{
 	}
 	
 	//Main Program
+	/** main method, starts game */
 	public static void main(String[] args){
 		new blackjackstartTest2();
 	}
