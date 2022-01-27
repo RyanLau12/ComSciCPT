@@ -99,7 +99,7 @@ public class blackjackstartTest3 implements ActionListener, KeyListener{
 			theframe.pack();
 			ssm.sendText("start," + usercount); 
 		}else if(evt.getSource() == thehelp){ //help panel
-			thepanel = new blackjackhelppanel();
+			thepanel = new blackjackhelppanel2();
 			thepanel.add(helpBackButton);
 			theframe.setContentPane(thepanel);
 			theframe.pack();
