@@ -91,6 +91,7 @@ public class blackjackstartpanel extends JPanel implements ActionListener{
 	//Constructor
 	public blackjackstartpanel(){
 		super();
+		
 		try{
 			theimg = ImageIO.read(new File("blackjackstart.png"));
 		}catch(IOException e){
