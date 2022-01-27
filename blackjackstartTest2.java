@@ -203,6 +203,7 @@ public class blackjackstartTest2 implements ActionListener, KeyListener{
 					}else if(player.sum(thecards1.getText()) == 21){
 						staycount++;
 						player.money = player.money + player.bet *3;
+						thebank.setText(player.money + "");
 						try{
 							PrintWriter blackjack = new PrintWriter(new FileWriter("blackjack", true));
 							blackjack.println(player.name + "blackjack");
@@ -304,6 +305,7 @@ public class blackjackstartTest2 implements ActionListener, KeyListener{
 						thechatdisplay.append(player.name + " busted");
 					}else if(player.sum(thecards2.getText()) == 21){
 						player.money = player.money + player.bet *3;
+						thebank.setText(player.money + "");
 						ssm.sendText("clientblackjack");
 						try{
 							PrintWriter blackjack = new PrintWriter(new FileWriter("blackjack", true));
